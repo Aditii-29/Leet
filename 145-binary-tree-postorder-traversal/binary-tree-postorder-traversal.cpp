@@ -1,36 +1,28 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
- * right(right) {}
- * };
- */
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
-        vector<int>ans;
-        if(root==NULL) return ans;
-        stack<TreeNode*>st1,st2;
-        st1.push(root);
-        while(!st1.empty()){
-            root=st1.top();
-            st1.pop();
-            st2.push(root);
-            if(root->left !=NULL){
-                st1.push(root->left);
+        vector<int> ans;
+        stack<TreeNode*> st;
+        TreeNode* curr = root;
+        TreeNode* lastVisited = NULL;
+
+        while (curr != NULL || !st.empty()) {
+            // Traverse to the leftmost node
+            if (curr != NULL) {
+                st.push(curr);
+                curr = curr->left;
+            } else {
+                TreeNode* peekNode = st.top();
+                // If there is a right child and it hasn't been visited yet, go right
+                if (peekNode->right != NULL && lastVisited != peekNode->right) {
+                    curr = peekNode->right;
+                } else {
+                    // Otherwise, process the node, pop it, and mark it as visited
+                    ans.push_back(peekNode->val);
+                    lastVisited = st.top();
+                    st.pop();
+                }
             }
-            if(root->right!=NULL){
-                st1.push(root->right);
-            }
-        }
-        while(!st2.empty()){
-            ans.push_back(st2.top()->val);
-            st2.pop();
         }
         return ans;
     }
