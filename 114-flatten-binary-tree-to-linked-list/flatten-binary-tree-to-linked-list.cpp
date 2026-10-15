@@ -25,7 +25,6 @@ public:
         if (!node) return;
         nodes.push_back(node);
         preorder(node->left, nodes);
-        preorder(node->right, nodes);
-        
+        preorder(node->right, nodes);    
     }
 };
